@@ -54,6 +54,7 @@ const routes = async (fastify: FastifyInstance, options: RegisterOptions) => {
   fastify.get('/read', async (request: FastifyRequest, reply: FastifyReply) => {
     const chapterId = (request.query as { chapterId: string }).chapterId;
     const provider = (request.query as { provider: string }).provider;
+    const mangaId = (request.query as { mangaId: string }).mangaId;
 
     if (typeof provider !== 'undefined') {
       const possibleProvider = PROVIDERS_LIST.MANGA.find(
@@ -67,7 +68,7 @@ const routes = async (fastify: FastifyInstance, options: RegisterOptions) => {
 
     try {
       const res = await anilist
-        .fetchChapterPages(chapterId)
+        .fetchChapterPages(chapterId, mangaId)
         .catch((err: Error) => reply.status(404).send({ message: err.message }));
 
       anilist = new META.Anilist.Manga();
